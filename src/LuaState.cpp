@@ -17,6 +17,7 @@ LuaValue LuaState::getGlobalValue(const char* name) {
 }
 
 void LuaState::doString(const std::string& str) {
+	DBGPRT("Doing " << str << "\n")
 	luaL_dostring(_state, str.c_str());
 }
 

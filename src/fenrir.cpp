@@ -17,6 +17,7 @@ int main(int argc, char *argv[])
 	PHYSFS_File* res = PHYSFS_openRead("/res.lua");
 	char* buf = new char[PHYSFS_fileLength(res)+1];
 	PHYSFS_read(res, buf, 1, PHYSFS_fileLength(res));
+	buf[PHYSFS_fileLength(res)] = '\0';
 	PHYSFS_close(res);
 
 	LuaState* baj = new LuaState();
