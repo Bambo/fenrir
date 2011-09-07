@@ -13,6 +13,7 @@ public:
 	LuaState();
 	void doString(const std::string&);
 	LuaValue getGlobalValue(const char* name);
+	void registerFunc(lua_CFunction, const char*);
 	~LuaState();
 };
 #endif

@@ -4,12 +4,31 @@
 #include <stdlib.h>
 #include "LuaState.hpp"
 #include "LuaValue.hpp"
-#include <string>
+#include "Debug.hpp"
+#include "string.hpp"
+#include <lua.hpp>
+
+/*
+ * This function got a tad more complicated than anticpated
+ */
+int regFiles(lua_State* l) {
+	lua_pushnil(l);
+	while(lua_next(l, -2) != 0) {
+		lua_pushnil(l);
+		while(lua_next(l,-2) != 0) {
+			DBGPRT(lua_tostring(l,-1))
+			lua_pop(l,-1);
+		}
+		lua_pop(l,-2);
+	}
+	lua_pop(l, -2);
+	return 0;
+}
+
 int main(int argc, char *argv[])
 {
 	PHYSFS_init(argv[0]);
-	std::string toMount;
-	toMount = PHYSFS_getBaseDir();
+	fenrir::string toMount(PHYSFS_getBaseDir());
 	toMount += PHYSFS_getDirSeparator();
 	toMount += "res";
 	PHYSFS_mount(toMount.c_str(), NULL, 1);
@@ -21,9 +40,8 @@ int main(int argc, char *argv[])
 	PHYSFS_close(res);
 
 	LuaState* baj = new LuaState();
+	baj->registerFunc(regFiles, "regFiles");
 	baj->doString(buf);
-	LuaValue apa = baj->getGlobalValue("apa");
-	std::cout << apa[1][1][1].asString();
 	delete[] buf;
 	delete baj;
 	PHYSFS_deinit();

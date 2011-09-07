@@ -21,6 +21,11 @@ void LuaState::doString(const std::string& str) {
 	luaL_dostring(_state, str.c_str());
 }
 
+void LuaState::registerFunc(lua_CFunction func, const char* name) {
+	lua_pushcfunction(_state, func);
+	lua_setglobal(_state, name);
+}
+
 LuaState::~LuaState() {
 	lua_close(_state);
 }

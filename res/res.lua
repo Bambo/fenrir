@@ -1,5 +1,6 @@
 apa = {
 	{ -- Level 1
-		{ "img.png"}
+		"img.png"
 	}
 }
+regFiles(apa)

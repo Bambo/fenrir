@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 project(fenrir)
-find_package(physfs REQUIRED)
+find_package(PhysFS REQUIRED)
 find_package(Lua51 REQUIRED)
 include_directories(include ${LUA_INCLUDE_DIR})
 add_subdirectory(src)
