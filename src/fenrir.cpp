@@ -22,6 +22,7 @@ int lua_loadFile(lua_State* l) {
 	PHYSFS_read(file, buf,1,PHYSFS_fileLength(file));
 	files->push_back(buf);
 	lua_pushlightuserdata(l,files->back());
+	PHYSFS_close(file);
 	return 1;
 }
 // Returns a table of all files in the dir
@@ -47,9 +48,11 @@ int main(int argc, char *argv[])
 	toMount += PHYSFS_getDirSeparator();
 	toMount += "res";
 	std::cout << "stuff is " << toMount.c_str() << "\n";
-	PHYSFS_mount(toMount.c_str(), NULL, 1);
+	if(!PHYSFS_mount(toMount.c_str(), NULL, 1)) {
+		std::cout << "Oh dear, you fucked up (trying to mount res dir): " << PHYSFS_getLastError() << std::endl;
+	}
 	// END OF BRAIN MELT
-	std::cout << "Search is " << PHYSFS_getRealDir("/res.lua") << "\n";
+	//std::cout << "Search is " << PHYSFS_getRealDir("/res.lua") << "\n";
 	PHYSFS_File* res = PHYSFS_openRead("/res.lua");
 	char* buf = new char[PHYSFS_fileLength(res)+1];
 	PHYSFS_read(res, buf, 1, PHYSFS_fileLength(res));
@@ -62,6 +65,7 @@ int main(int argc, char *argv[])
 	baj->doString(buf);
 	delete[] buf;
 	delete baj;
+	delete files;
 	PHYSFS_deinit();
 	return 0;
 }
