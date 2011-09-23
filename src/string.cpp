@@ -13,7 +13,6 @@ namespace fenrir {
 	}
 
 	string& string::operator+=(const string& rh) {
-		DBGPRT(mString << " :::::::: " << rh.mString << "\n")
 		int len = std::strlen(mString)+strlen(rh.mString);
 		char* tmpStr = new char[len+1]; 
 		std::memset(tmpStr, '\0', len); // Valgrind goes mad if i don't do this, needs more investigation
