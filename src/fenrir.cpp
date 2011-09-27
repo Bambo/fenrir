@@ -8,6 +8,13 @@
 #include "string.hpp"
 #include <lua.hpp>
 #include <vector>
+#include "EventManager.hpp"
+
+namespace EventManager {
+	extern void init();
+	extern void destroy();
+	extern void poll();
+}
 
 std::vector<char*>* files = NULL;
 
@@ -41,6 +48,7 @@ int lua_listDir(lua_State* l) {
 
 int main(int argc, char *argv[])
 {
+	EventManager::init();
 	PHYSFS_init(argv[0]);
 	// Let's init the global files vector
 	files = new std::vector<char*>;
@@ -50,14 +58,20 @@ int main(int argc, char *argv[])
 	std::cout << "stuff is " << toMount.c_str() << "\n";
 	if(!PHYSFS_mount(toMount.c_str(), NULL, 1)) {
 		std::cout << "Oh dear, you fucked up (trying to mount res dir): " << PHYSFS_getLastError() << std::endl;
+		return 1;
 	}
 	// END OF BRAIN MELT
-	//std::cout << "Search is " << PHYSFS_getRealDir("/res.lua") << "\n";
 	PHYSFS_File* res = PHYSFS_openRead("/res.lua");
+	if(res == NULL) {
+		std::cout << "Fucked up on opening res.lua: " << PHYSFS_getLastError() << std::endl;
+		return 1;
+	}
 	char* buf = new char[PHYSFS_fileLength(res)+1];
 	PHYSFS_read(res, buf, 1, PHYSFS_fileLength(res));
 	buf[PHYSFS_fileLength(res)] = '\0';
 	PHYSFS_close(res);
+
+
 
 	LuaState* baj = new LuaState();
 	baj->registerFunc(lua_listDir, "listFiles");
@@ -67,5 +81,6 @@ int main(int argc, char *argv[])
 	delete baj;
 	delete files;
 	PHYSFS_deinit();
+	EventManager::destroy();
 	return 0;
 }
