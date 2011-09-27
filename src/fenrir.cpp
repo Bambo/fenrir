@@ -10,6 +10,9 @@
 #include <vector>
 #include "EventManager.hpp"
 
+
+// The messiest of all source files :(
+
 namespace EventManager {
 	extern void init();
 	extern void destroy();
