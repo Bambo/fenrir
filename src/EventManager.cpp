@@ -25,7 +25,9 @@ namespace EventManager {
 	}
 	void registerEvent(int id, eventCallback* event) {
 		std::cout << "Regging naow\n";
-		_event* ev = new _event{id, event}; //Initalizer list from c++11
+		_event* ev = new _event;
+		ev->id = id;
+		ev->callback = event;
 		events->push_back(ev);
 	}
 	void init() {
@@ -36,10 +38,10 @@ namespace EventManager {
 		delete events; // No fuckups here, tada
 	}
 	void poll() {
-		// Range-based for loop, introduced in c++11.
-		for(_event* ev : *events) {
-			std::cout << ev->id << "\n";
-			ev->callback((void*)"troll");
+		auto it = events->front();
+		auto end = events->back();
+		for(; it != end; it++) {
+			it->callback((void*)"troll");
 		}
 		events->clear();
 	}

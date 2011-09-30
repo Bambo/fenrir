@@ -16,6 +16,7 @@ extern "C" {
 }
 #include "LuaValue.hpp"
 
+
 class LuaState {
 private:
 	lua_State* _state;

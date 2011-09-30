@@ -19,6 +19,7 @@
 #include <lua.hpp>
 #include <vector>
 #include "EventManager.hpp"
+#include "Compiler.hpp"
 
 
 // The messiest of all source files :(
@@ -26,7 +27,7 @@
 namespace EventManager {
 	extern void init();
 	extern void destroy();
-	extern void poll();
+	extern void poll() FEN_HOT; // This function is so hot
 }
 
 std::vector<char*>* files = NULL;
